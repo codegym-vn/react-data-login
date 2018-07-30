@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {View, Text, TouchableOpacity, Button, StyleSheet} from 'react-native'
+import {View, Text, Button, StyleSheet} from 'react-native'
 import {createStackNavigator} from 'react-navigation'
 import {
     getCurrentUser,
