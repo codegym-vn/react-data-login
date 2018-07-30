@@ -2,10 +2,11 @@ import React, {Component} from 'react'
 import {View, Text, StyleSheet} from 'react-native'
 import {createStackNavigator} from 'react-navigation'
 import LoginForm from "./LoginForm"
+import RegisterForm from "./RegisterForm"
 
 class LoginPage extends Component {
     static navigationOptions = {
-        title: 'News',
+        title: 'Account',
         headerStyle: {
             backgroundColor: '#ff6600'
         },
@@ -14,10 +15,27 @@ class LoginPage extends Component {
         }
     }
 
+    state = {
+        action: 'login'
+    }
+
+    _handleOnChangeAction = action => {
+        this.setState({
+            action
+        })
+    }
+
     render() {
+        const {action} = this.state
+
         return (
             <View style={styles.container}>
-                <LoginForm {...this.props}/>
+                {
+                    action === 'login'
+                        ? <LoginForm onAction={this._handleOnChangeAction} {...this.props}/>
+                        : <RegisterForm onAction={this._handleOnChangeAction} {...this.props}/>
+
+                }
             </View>
         )
     }
@@ -26,6 +44,8 @@ class LoginPage extends Component {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: '#eee',
+        width: '100%',
+        height: '100%',
     }
 })
 

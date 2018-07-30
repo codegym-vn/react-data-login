@@ -1,11 +1,11 @@
 import React, {Component} from 'react'
-import PropTypes from 'prop-types'
-import {View, TextInput, Text, TouchableOpacity, Button, Alert, StyleSheet} from 'react-native'
-import {login} from "../services/AuthServices"
+import {View, TextInput, Button, Alert, StyleSheet, TouchableOpacity, Text} from 'react-native'
+import {register} from "../services/AuthServices"
 
-class LoginForm extends Component {
+class RegisterForm extends Component {
     state = {
         username: '',
+        name: '',
         password: ''
     }
 
@@ -15,20 +15,16 @@ class LoginForm extends Component {
         })
     }
 
-    _handlePressLogin = () => {
-        const {username, password} = this.state
+    _handlePressRegister = () => {
+        const {username, name, password} = this.state
 
         if (!username) return Alert.alert('Please enter your username')
         if (!password) return Alert.alert('Please enter your password')
+        if (!name) return Alert.alert('Please enter your name')
 
-        login({username, password})
+        register({username, password, name})
             .then(user => {
-                this.setState({
-                    username: '',
-                    password: ''
-                })
-
-                this.props.navigation.navigate('Home')
+                this.props.onAction('login')
             })
             .catch(error => {
                 const {message} = error
@@ -37,12 +33,12 @@ class LoginForm extends Component {
             })
     }
 
-    _handlePressRegister = () => {
-        this.props.onAction('register')
+    _handlePressGoToLogin = () => {
+        this.props.onAction('login')
     }
 
     render() {
-        const {username, password} = this.state
+        const {username, name, password} = this.state
 
         return (
             <View style={styles.container}>
@@ -54,6 +50,11 @@ class LoginForm extends Component {
                         onChangeText={this._handleTextInputChange('username')}/>
                     <TextInput
                         style={styles.textInput}
+                        placeholder='Full name'
+                        value={name}
+                        onChangeText={this._handleTextInputChange('name')}/>
+                    <TextInput
+                        style={styles.textInput}
                         placeholder='Password'
                         value={password}
                         onChangeText={this._handleTextInputChange('password')}
@@ -61,10 +62,10 @@ class LoginForm extends Component {
 
                     <Button
                         style={styles.button}
-                        title='Login' onPress={this._handlePressLogin}/>
+                        title='Register' onPress={this._handlePressRegister}/>
 
-                    <TouchableOpacity onPress={this._handlePressRegister}>
-                        <Text>Or register now!</Text>
+                    <TouchableOpacity onPress={this._handlePressGoToLogin}>
+                        <Text>Or login now!</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -99,9 +100,4 @@ const styles = StyleSheet.create({
     button: {}
 })
 
-LoginForm.propTypes = {
-    navigation: PropTypes.object.isRequired,
-    onAction: PropTypes.func.isRequired,
-}
-
-export default LoginForm
+export default RegisterForm
